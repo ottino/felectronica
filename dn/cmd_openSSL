@@ -1,0 +1,17 @@
+C:\Users\maxi
+λ openssl genrsa -out ClavePrivadaMaxi 1024
+Generating RSA private key, 1024 bit long modulus
+................++++++
+..++++++
+e is 65537 (0x10001)
+
+C:\Users\maxi
+λ openssl req -new -key ClavePrivadaMaxi -subj "/C=AR/O=sys/CN=fd/serialNumber=CUIT 20313076300" -out CSRMaxi
+
+C:\Users\maxi
+λ ls Clave*
+ClavePrivadaMaxi
+
+C:\Users\maxi
+λ ls Clave* CSR*
+CSRMaxi  ClavePrivadaMaxi
