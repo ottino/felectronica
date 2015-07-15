@@ -27,7 +27,9 @@
 	echo "Sing de Acceso: $WSAA->Sign \n";
 	
 	# Crear objeto interface Web Service de Factura Electrónica
-	$WSFE = new COM('WSFE') ;
+	//https://groups.google.com/forum/#!msg/pyafipws/aixTWdcGy-E/pJuyeJ_6iyAJ
+	$WSFE = new COM('WSFEv1') ; // servicio de afip actual
+
 	# Setear tocken y sing de autorización (pasos previos) Y CUIT del emisor
 	$WSFE->Token = $WSAA->Token;
 	$WSFE->Sign = $WSAA->Sign; 
@@ -39,16 +41,27 @@
 	
 	# Llamo a un servicio nulo, para obtener el estado del servidor (opcional)
 	$WSFE->Dummy();
-	echo "appserver status $WSFE->AppServerStatus \n";
+	echo "appserver status $WSFE->AppServerStatus \n"; 
+	echo "<br>";
 	echo "dbserver status $WSFE->DbServerStatus \n";
+	echo "<br>";
 	echo "authserver status $WSFE->AuthServerStatus \n";
+
+	//$CAE = $WSFE->ParamGetCotizacion(20090403);
+	//echo $CAE;
+
 	
+	/*
 	# Recupera cantidad máxima de registros (opcional)
 	$qty = $WSFE->RecuperarQty();
 	
 	# Recupera último número de secuencia ID
 	$LastId = $WSFE->UltNro();
+	//$LastId = $WSFE->CompUltimoAutorizado();
 	
+	$LastId = 0;
+	
+
 	# Recupero último número de comprobante para un punto de venta y tipo (opcional)
 	$tipo_cbte = 1; $punto_vta = 1;
 	$LastCBTE = $WSFE->RecuperaLastCMP($punto_vta, $tipo_cbte);
@@ -84,6 +97,8 @@
 	} elseif ($WSFE->Motivo!="NULL" && $WSFE->Motivo!="00") {
 		echo "Se asignó CAE pero con advertencias. Motivos: $WSFE->Motivos \n";
 	} 
+	*/
+
 /*
 } catch (Exception $e) {
 	echo 'Excepción: ',  $e->getMessage(), "\n";
