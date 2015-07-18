@@ -33,7 +33,7 @@
 	# Setear tocken y sing de autorización (pasos previos) Y CUIT del emisor
 	$WSFE->Token = $WSAA->Token;
 	$WSFE->Sign = $WSAA->Sign; 
-	$WSFE->Cuit = "23111111113";
+	$WSFE->Cuit = "20313076300";
 	
 	# Conectar al Servicio Web de Facturación
 	$ok = $WSFE->Conectar(); // pruebas
@@ -47,6 +47,8 @@
 	echo "<br>";
 	echo "authserver status $WSFE->AuthServerStatus \n";
 
+$qty = $WSFE->UltNro();
+	
 	//$CAE = $WSFE->ParamGetCotizacion(20090403);
 	//echo $CAE;
 

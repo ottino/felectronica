@@ -1,4 +1,3 @@
-#!/usr/bin/php
 <?php
 # Author: Gerardo Fisanotti - DvSHyS/DiOPIN/AFIP - 13-apr-07
 # Function: Get an authorization ticket (TA) from AFIP WSAA
@@ -11,7 +10,7 @@
 define ("WSDL", "wsaa.wsdl");     # The WSDL corresponding to WSAA
 define ("CERT", "DN.crt");       # The X.509 certificate in PEM format
 define ("PRIVATEKEY", "ClavePrivadaMaxi.key"); # The private key correspoding to CERT (PEM)
-define ("PASSPHRASE", "xxxxx"); # The passphrase (if any) to sign
+define ("PASSPHRASE", "ClavePrivadaMaxi"); # The passphrase (if any) to sign
 define ("PROXY_HOST", "10.20.152.112"); # Proxy IP, to reach the Internet
 define ("PROXY_PORT", "80");            # Proxy TCP port
 define ("URL", "https://wsaahomo.afip.gov.ar/ws/services/LoginCms");
@@ -38,8 +37,12 @@ function CreateTRA($SERVICE)
 # MIME heading leaving the final CMS required by WSAA.
 function SignTRA()
 {
-  $STATUS=openssl_pkcs7_sign("TRA.xml", "TRA.tmp", "file://".CERT,
-    array("file://".PRIVATEKEY, PASSPHRASE),
+        $fp = fopen('TRA.tmp','w');
+            fwrite($fp,"");
+            fclose($fp);
+
+  $STATUS=openssl_pkcs7_sign(realpath("TRA.xml"), realpath("TRA.tmp"), "file://".realpath(CERT),
+    array("file://".realpath(PRIVATEKEY), PASSPHRASE),
     array(),
     !PKCS7_DETACHED
     );
@@ -83,12 +86,26 @@ function ShowUsage($MyPath)
   printf("  Ej.: %s wsfe\n", $MyPath);
 }
 #==============================================================================
+
 ini_set("soap.wsdl_cache_enabled", "0");
+ini_set("soap.wsdl_cache_ttl","0");
+
 if (!file_exists(CERT)) {exit("Failed to open ".CERT."\n");}
 if (!file_exists(PRIVATEKEY)) {exit("Failed to open ".PRIVATEKEY."\n");}
 if (!file_exists(WSDL)) {exit("Failed to open ".WSDL."\n");}
-if ( $argc < 2 ) {ShowUsage($argv[0]); exit();}
+
+/*
+  if ( $argc < 2 ) 
+      {
+        ShowUsage($argv[0]); 
+        exit();
+      }
+
 $SERVICE=$argv[1];
+
+*/
+$SERVICE= 'wsfe';
+
 CreateTRA($SERVICE);
 $CMS=SignTRA();
 $TA=CallWSAA($CMS);
